@@ -10,7 +10,7 @@ GoRouter appRouter = GoRouter(
   refreshListenable: appRouteState,
   navigatorKey: navKey,
   initialLocation: appRouteState.isUserLoggedIn
-      ? '/authenticated/home'
+      ? '/authenticated/lead_list'
       : '/login',
 );
 GlobalKey<NavigatorState> navKey = GlobalKey();

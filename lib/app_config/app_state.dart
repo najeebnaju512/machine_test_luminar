@@ -53,7 +53,7 @@ class AppRouteState extends ChangeNotifier {
       if (state.fullPath == "/" ||
           state.fullPath == AppRoutes.loginPath ||
           state.fullPath == AppRoutes.auth) {
-        return '/authenticated/home';
+        return '/authenticated/lead_list';
       }
     }
     return null;

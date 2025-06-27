@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:machine_test_luminar/app_config/app_state.dart';
 import 'package:machine_test_luminar/router/router.dart';
+import 'package:machine_test_luminar/screens/authenticated/listing_screen/view.dart';
 import 'package:machine_test_luminar/screens/authenticated/main_frame/view.dart';
 import 'package:machine_test_luminar/screens/un_authenticated/login/view.dart';
 
@@ -38,5 +39,16 @@ class AppRoutes {
 }
 
 class Authenticated {
-  static final List<RouteBase> routes = [];
+  static const String homePath = '/lead_list';
+  static const String home = 'lead_list';
+
+  static final List<RouteBase> routes = [
+    GoRoute(
+      path: homePath,
+      name: home,
+      builder: (context, state) {
+        return LeadListScreen();
+      },
+    ),
+  ];
 }
