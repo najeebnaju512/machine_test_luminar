@@ -160,7 +160,7 @@ class CustomTextFormField extends FormField<String> {
              children: [
                if (label != null) ...[
                  Text(
-                   label!,
+                   label,
                    style: const TextStyle(fontWeight: FontWeight.w600),
                  ),
                  const SizedBox(height: 6),
