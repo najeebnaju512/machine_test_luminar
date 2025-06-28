@@ -64,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 32),
-      
+
                   CustomTextFormField(
                     label: 'Email',
                     hintText: 'Enter your email',
@@ -76,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                   const SizedBox(height: 16),
-      
+
                   CustomTextFormField(
                     label: 'Password',
                     hintText: 'Enter your password',
@@ -89,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                     minLength: 6,
                   ),
-      
+
                   const SizedBox(height: 24),
                   Obx(
                     () => ElevatedButton(
@@ -102,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       onPressed: controller.onSubmit,
                       child: controller.isLoading.value
-                          ? CircularProgressIndicator(color: Colors.white)
+                          ? CupertinoActivityIndicator(color: Colors.white)
                           : const Text(
                               "Login",
                               style: TextStyle(

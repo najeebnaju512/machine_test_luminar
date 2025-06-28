@@ -83,7 +83,7 @@ class _LeadDetailPageState extends State<LeadDetailPage> {
             appBar: AppBar(title: const Text("Lead Details")),
             body: Obx(() {
               if (controller.isloading.value) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: CupertinoActivityIndicator());
               }
 
               final lead = controller.leadData.value;

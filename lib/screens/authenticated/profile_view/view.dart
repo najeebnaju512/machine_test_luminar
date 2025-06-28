@@ -96,14 +96,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               },
                               child: Padding(
                                 padding: const EdgeInsets.all(12),
-                                child: Icon(Icons.logout_outlined, color: Colors.white,size: 25,),
+                                child: Icon(
+                                  Icons.logout_outlined,
+                                  color: Colors.white,
+                                  size: 25,
+                                ),
                               ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 12),
                         if (controller.isLoading.value) ...[
-                          Center(child: CircularProgressIndicator()),
+                          Center(child: CupertinoActivityIndicator()),
                         ],
                         if (!controller.isLoading.value) ...[
                           CircleAvatar(
@@ -199,7 +203,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: SingleChildScrollView(
                             child: Obx(
                               () => controller.isLoading.value
-                                  ? Center(child: CircularProgressIndicator())
+                                  ? Center(child: CupertinoActivityIndicator())
                                   : Form(
                                       key: controller.formKey,
                                       child: Column(
