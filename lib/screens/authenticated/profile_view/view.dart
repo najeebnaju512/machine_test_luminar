@@ -1,10 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:machine_test_luminar/core/tag_helper/teg_generator.dart';
-import 'package:machine_test_luminar/db/hive_key.dart';
-import 'package:machine_test_luminar/db/model/user_details/user.dart';
 import 'package:machine_test_luminar/widget/text_form_feild/widget.dart';
 
 import 'controller.dart';
@@ -96,32 +93,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                   const SizedBox(height: 12),
-                  CircleAvatar(
-                    radius: 36,
-                    backgroundColor: Colors.white,
-                    child: Text(
-                      initials,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF4F46E5),
+                  if (controller.isLoading.value) ...[
+                    Center(child: CupertinoActivityIndicator()),
+                  ],
+                  if (!controller.isLoading.value) ...[
+                    CircleAvatar(
+                      radius: 36,
+                      backgroundColor: Colors.white,
+                      child: Text(
+                        initials,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF4F46E5),
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    controller.nameController.text,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                    const SizedBox(height: 12),
+                    Text(
+                      controller.nameController.text,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    controller.emailController.text,
-                    style: const TextStyle(fontSize: 14, color: Colors.white70),
-                  ),
+                    const SizedBox(height: 4),
+                    Text(
+                      controller.emailController.text,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ],
                 ],
               ),
             );
@@ -179,46 +184,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     child: SingleChildScrollView(
                       child: Obx(
-                        () => Column(
-                          children: [
-                            CustomTextFormField(
-                              label: "Name",
-                              controller: controller.nameController,
-                              readOnly: !controller.isEditing.value,
-                              validationTypes: [ValidationType.required],
-                            ),
-                            const SizedBox(height: 12),
-                            CustomTextFormField(
-                              label: "Email",
-                              controller: controller.emailController,
-                              readOnly: !controller.isEditing.value,
-                              validationTypes: [
-                                ValidationType.required,
-                                ValidationType.email,
-                              ],
-                            ),
-                            const SizedBox(height: 12),
-                            CustomTextFormField(
-                              label: "Phone No",
-                              controller: controller.phoneNoController,
-                              readOnly: !controller.isEditing.value,
-                              validationTypes: [
-                                ValidationType.required,
-                                ValidationType.phone,
-                              ],
-                            ),
-                            const SizedBox(height: 12),
-                            CustomTextFormField(
-                              label: "WhatsApp No",
-                              controller: controller.whatsAppController,
-                              readOnly: !controller.isEditing.value,
-                              validationTypes: [
-                                ValidationType.required,
-                                ValidationType.phone,
-                              ],
-                            ),
-                          ],
-                        ),
+                        () => controller.isLoading.value
+                            ? Center(child: CupertinoActivityIndicator())
+                            : Column(
+                                children: [
+                                  CustomTextFormField(
+                                    label: "Name",
+                                    controller: controller.nameController,
+                                    readOnly: !controller.isEditing.value,
+                                    validationTypes: [ValidationType.required],
+                                  ),
+                                  const SizedBox(height: 12),
+                                  CustomTextFormField(
+                                    label: "Email",
+                                    controller: controller.emailController,
+                                    readOnly: !controller.isEditing.value,
+                                    validationTypes: [
+                                      ValidationType.required,
+                                      ValidationType.email,
+                                    ],
+                                  ),
+                                  const SizedBox(height: 12),
+                                  CustomTextFormField(
+                                    label: "Phone No",
+                                    controller: controller.phoneNoController,
+                                    readOnly: !controller.isEditing.value,
+                                    validationTypes: [
+                                      ValidationType.required,
+                                      ValidationType.phone,
+                                    ],
+                                  ),
+                                  const SizedBox(height: 12),
+                                  CustomTextFormField(
+                                    label: "WhatsApp No",
+                                    controller: controller.whatsAppController,
+                                    readOnly: !controller.isEditing.value,
+                                    validationTypes: [
+                                      ValidationType.required,
+                                      ValidationType.phone,
+                                    ],
+                                  ),
+                                ],
+                              ),
                       ),
                     ),
                   ),

@@ -1,6 +1,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:machine_test_luminar/app_config/app_state.dart';
 import 'package:machine_test_luminar/router/router.dart';
+import 'package:machine_test_luminar/router/transition/transition.dart';
+import 'package:machine_test_luminar/screens/authenticated/listing_screen/details/view.dart';
 import 'package:machine_test_luminar/screens/authenticated/listing_screen/view.dart';
 import 'package:machine_test_luminar/screens/authenticated/main_frame/view.dart';
 import 'package:machine_test_luminar/screens/authenticated/profile_view/view.dart';
@@ -16,11 +18,11 @@ class AppRoutes {
     GoRoute(
       path: loginPath,
       name: login,
-      builder: (context, state) {
-        return const LoginScreen();
-      },
+      pageBuilder: (context, state) => CustomTransitionWrapper(
+        key: state.pageKey,
+        child: const LoginScreen(),
+      ),
     ),
-
     GoRoute(
       redirect: appRouteState.redirect,
       path: AppRoutes.auth,
@@ -41,24 +43,39 @@ class AppRoutes {
 
 class Authenticated {
   static const String homePath = '/lead_list';
+  static const String leaddetails = '/lead_details/:id';
   static const String profilePath = '/profile';
   static const String home = 'lead_list';
+  static const String lead = 'lead';
   static const String profile = 'profile';
 
   static final List<RouteBase> routes = [
     GoRoute(
       path: homePath,
       name: home,
-      builder: (context, state) {
-        return LeadListScreen();
+      pageBuilder: (context, state) => CustomTransitionWrapper(
+        key: state.pageKey,
+        child: const LeadListScreen(),
+      ),
+    ),
+    GoRoute(
+      path: leaddetails,
+      name: lead,
+      pageBuilder: (context, state) {
+        final id = state.pathParameters['id'];
+        return CustomTransitionWrapper(
+          key: state.pageKey,
+          child: LeadDetailPage(id: id!),
+        );
       },
     ),
     GoRoute(
       path: profilePath,
       name: profile,
-      builder: (context, state) {
-        return ProfileScreen();
-      },
+      pageBuilder: (context, state) => CustomTransitionWrapper(
+        key: state.pageKey,
+        child: const ProfileScreen(),
+      ),
     ),
   ];
 }

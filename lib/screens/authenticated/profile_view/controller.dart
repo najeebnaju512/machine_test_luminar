@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:machine_test_luminar/app_config/app_state.dart';
 import 'package:machine_test_luminar/db/hive_box_helper.dart';
 import 'package:machine_test_luminar/router/router.dart';
@@ -10,6 +9,7 @@ import 'package:machine_test_luminar/shared/repo/authenticated/profil.dart';
 class ProfileController extends GetxController {
   RxBool isEditing = false.obs;
   RxString name = "".obs;
+  RxBool isLoading = false.obs;
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final emailController = TextEditingController();
@@ -67,6 +67,8 @@ class ProfileController extends GetxController {
   }
 
   Future<void> getData() async {
+    if (isLoading.value ) return;
+    isLoading.value = true;
     var res = await repo.getProfileData();
     if (res?.status == 200) {
       userData = ProfileModel.fromJson(res?.data).user;
@@ -77,5 +79,6 @@ class ProfileController extends GetxController {
       whatsAppController.text = userData?.whatsappNumber ?? '';
       name.refresh();
     }
+     isLoading.value = false;
   }
 }

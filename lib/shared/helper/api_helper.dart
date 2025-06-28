@@ -5,13 +5,8 @@ import 'dart:developer';
 
 import 'package:machine_test_luminar/app_config/app_config.dart';
 
-
 /// Enum to define the HTTP request type
-enum ApiCase {
-  post,
-  put,
-  patch,
-}
+enum ApiCase { post, put, patch }
 
 /// Common API response model
 class ApiResponse {
@@ -42,14 +37,9 @@ class ApiHelper {
         'Authorization': 'Bearer $access',
       };
     } else if (dbName != null) {
-      return {
-        'Content-Type': 'application/json',
-        'dbName': dbName,
-      };
+      return {'Content-Type': 'application/json', 'dbName': dbName};
     } else {
-      return {
-        'Content-Type': 'application/json',
-      };
+      return {'Content-Type': 'application/json'};
     }
   }
 
@@ -57,16 +47,21 @@ class ApiHelper {
   static Future<ApiResponse> getData({
     required String endPoint,
     Map<String, String>? header,
+    Map<String, dynamic>? queryParams,
   }) async {
-    log("ApiHelper -> GET: $endPoint");
+    log("ApiHelper → GET: $endPoint");
+    if (queryParams != null) log("Query Parameters: $queryParams");
 
     try {
       final response = await _dio.get(
+
         endPoint,
+        queryParameters: queryParams,
         options: Options(headers: header),
       );
 
       log("Status: ${response.statusCode}");
+      log("Response Data: ${response.data}");
 
       return ApiResponse(
         status: response.statusCode ?? 500,
