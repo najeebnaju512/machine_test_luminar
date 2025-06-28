@@ -26,22 +26,29 @@ class CustomValidators {
     for (final type in types) {
       switch (type) {
         case ValidationType.required:
-          if (value == null || value.trim().isEmpty) return '$label is required.';
+          if (value == null || value.trim().isEmpty)
+            return '$label is required.';
           break;
         case ValidationType.email:
           final regex = RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$');
-          if (value != null && !regex.hasMatch(value)) return 'Enter a valid email.';
+          if (value != null && !regex.hasMatch(value))
+            return 'Enter a valid email.';
           break;
         case ValidationType.number:
-          if (value != null && double.tryParse(value) == null) return 'Enter a valid number.';
+          if (value != null && double.tryParse(value) == null)
+            return 'Enter a valid number.';
           break;
         case ValidationType.phone:
           final regex = RegExp(r'^\+?[0-9]{7,15}$');
-          if (value != null && !regex.hasMatch(value)) return 'Enter a valid phone number.';
+          if (value != null && !regex.hasMatch(value))
+            return 'Enter a valid phone number.';
           break;
         case ValidationType.url:
-          final regex = RegExp(r'^(https?:\/\/)?([\w\-])+\.{1}([a-zA-Z]{2,63})([\/\w\-.]*)*\/?$');
-          if (value != null && !regex.hasMatch(value)) return 'Enter a valid URL.';
+          final regex = RegExp(
+            r'^(https?:\/\/)?([\w\-])+\.{1}([a-zA-Z]{2,63})([\/\w\-.]*)*\/?$',
+          );
+          if (value != null && !regex.hasMatch(value))
+            return 'Enter a valid URL.';
           break;
         case ValidationType.minLength:
           if (minLength != null && (value?.length ?? 0) < minLength) {
@@ -75,6 +82,9 @@ class CustomTextFormField extends FormField<String> {
 
   /// Makes the input non-editable
   final bool readOnly;
+
+  /// Makes the input obscure
+  final bool obscureText;
 
   /// Autofocus on screen load
   final bool autoFocus;
@@ -117,6 +127,7 @@ class CustomTextFormField extends FormField<String> {
     this.label,
     this.hintText,
     this.readOnly = false,
+    this.obscureText = false,
     this.autoFocus = false,
     this.controller,
     this.validationTypes,
@@ -130,52 +141,60 @@ class CustomTextFormField extends FormField<String> {
     this.onFieldSubmitted,
     this.focusNode,
   }) : super(
-          validator: (validationTypes != null)
-              ? (value) => CustomValidators.validate(
-                    value,
-                    validationTypes,
-                    label ?? 'Field',
-                    minLength: minLength,
-                    maxLength: maxLength,
-                    customValidator: customValidator,
-                  )
-              : null,
-          builder: (field) {
-            final _CustomTextFormFieldState state = field as _CustomTextFormFieldState;
+         validator: (validationTypes != null)
+             ? (value) => CustomValidators.validate(
+                 value,
+                 validationTypes,
+                 label ?? 'Field',
+                 minLength: minLength,
+                 maxLength: maxLength,
+                 customValidator: customValidator,
+               )
+             : null,
+         builder: (field) {
+           final _CustomTextFormFieldState state =
+               field as _CustomTextFormFieldState;
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (label != null) ...[
-                  Text(label!, style: const TextStyle(fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 6),
-                ],
-                TextField(
-                  controller: state._effectiveController,
-                  focusNode: focusNode,
-                  keyboardType: keyboardType,
-                  textInputAction: textInputAction,
-                  inputFormatters: inputFormatters,
-                  autofocus: autoFocus,
-                  readOnly: readOnly,
-                  onChanged: (val) {
-                    field.didChange(val);
-                    onChanged?.call(val);
-                  },
-                  onSubmitted: onFieldSubmitted,
-                  decoration: InputDecoration(
-                    hintText: hintText,
-                    errorText: field.errorText,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-                  ),
-                ),
-              ],
-            );
-          },
-        );
+           return Column(
+             crossAxisAlignment: CrossAxisAlignment.start,
+             children: [
+               if (label != null) ...[
+                 Text(
+                   label!,
+                   style: const TextStyle(fontWeight: FontWeight.w600),
+                 ),
+                 const SizedBox(height: 6),
+               ],
+               TextField(
+                 controller: state._effectiveController,
+                 focusNode: focusNode,
+                 keyboardType: keyboardType,
+                 textInputAction: textInputAction,
+                 inputFormatters: inputFormatters,
+                 autofocus: autoFocus,
+                 readOnly: readOnly,
+                 obscureText: obscureText,
+                 onChanged: (val) {
+                   field.didChange(val);
+                   onChanged?.call(val);
+                 },
+                 onSubmitted: onFieldSubmitted,
+                 decoration: InputDecoration(
+                   hintText: hintText,
+                   errorText: field.errorText,
+                   border: OutlineInputBorder(
+                     borderRadius: BorderRadius.circular(8),
+                   ),
+                   contentPadding: const EdgeInsets.symmetric(
+                     horizontal: 12,
+                     vertical: 14,
+                   ),
+                 ),
+               ),
+             ],
+           );
+         },
+       );
 
   @override
   FormFieldState<String> createState() => _CustomTextFormFieldState();
@@ -208,7 +227,9 @@ class _CustomTextFormFieldState extends FormFieldState<String> {
 
   @override
   void dispose() {
-    (widget as CustomTextFormField).controller?.removeListener(_onExternalChanged);
+    (widget as CustomTextFormField).controller?.removeListener(
+      _onExternalChanged,
+    );
     _controller?.dispose();
     super.dispose();
   }
