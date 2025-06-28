@@ -84,7 +84,7 @@ class _LeadListScreenState extends State<LeadListScreen> {
                   child: Obx(() {
                     if (controller.isLoading.value &&
                         controller.leads.isEmpty) {
-                      return const Center(child: CupertinoActivityIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     }
 
                     return ListView.builder(
@@ -98,7 +98,7 @@ class _LeadListScreenState extends State<LeadListScreen> {
                           return const Center(
                             child: Padding(
                               padding: EdgeInsets.all(16),
-                              child: CupertinoActivityIndicator(),
+                              child: CircularProgressIndicator(),
                             ),
                           );
                         }

@@ -66,11 +66,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     child: Column(
                       children: [
+                        const SizedBox(height: 25),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            IconButton(
-                              onPressed: () {
+                            InkWell(
+                              onTap: () {
                                 showDialog(
                                   context: context,
                                   builder: (context) => AlertDialog(
@@ -93,15 +94,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                 );
                               },
-                              icon: const Icon(Icons.logout),
-                              color: Colors.white,
-                              tooltip: "Logout",
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Icon(Icons.logout_outlined, color: Colors.white,size: 25,),
+                              ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 12),
                         if (controller.isLoading.value) ...[
-                          Center(child: CupertinoActivityIndicator()),
+                          Center(child: CircularProgressIndicator()),
                         ],
                         if (!controller.isLoading.value) ...[
                           CircleAvatar(
@@ -197,7 +199,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: SingleChildScrollView(
                             child: Obx(
                               () => controller.isLoading.value
-                                  ? Center(child: CupertinoActivityIndicator())
+                                  ? Center(child: CircularProgressIndicator())
                                   : Form(
                                       key: controller.formKey,
                                       child: Column(

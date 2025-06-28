@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'dart:developer';
 
 import 'package:machine_test_luminar/app_config/app_config.dart';
+import 'package:machine_test_luminar/core/dev_tools/print.dart';
 
 /// Enum to define the HTTP request type
 enum ApiCase { post, put, patch }
@@ -49,7 +50,7 @@ class ApiHelper {
     Map<String, String>? header,
     Map<String, dynamic>? queryParams,
   }) async {
-    log("ApiHelper → GET: $endPoint");
+    devPrint("ApiHelper → GET: $endPoint");
     if (queryParams != null) log("Query Parameters: $queryParams");
 
     try {
@@ -60,8 +61,8 @@ class ApiHelper {
         options: Options(headers: header),
       );
 
-      log("Status: ${response.statusCode}");
-      log("Response Data: ${response.data}");
+      devPrintWarning("Status: ${response.statusCode}");
+      devPrintWarning("Response Data: ${response.data}");
 
       return ApiResponse(
         status: response.statusCode ?? 500,
@@ -69,7 +70,7 @@ class ApiHelper {
         data: response.data,
       );
     } on DioException catch (e) {
-      log("GET Error: ${e.message}");
+      devPrintError("GET Error: ${e.message}");
       return ApiResponse(
         status: e.response?.statusCode ?? 500,
         msg: e.message ?? 'Unknown error',
@@ -86,8 +87,8 @@ class ApiHelper {
     ApiCase method = ApiCase.post,
     bool isMultipart = false,
   }) async {
-    log("ApiHelper -> ${method.name.toUpperCase()}: $endPoint");
-    log("isMultipart: $isMultipart");
+    devPrint("ApiHelper -> ${method.name.toUpperCase()}: $endPoint");
+    devPrint("isMultipart: $isMultipart");
 
     try {
       final dataToSend = isMultipart
@@ -122,7 +123,7 @@ class ApiHelper {
           break;
       }
 
-      log("Status: ${response.statusCode}");
+      devPrintSuccess("Status: ${response.statusCode}");
 
       return ApiResponse(
         status: response.statusCode ?? 500,
@@ -130,7 +131,7 @@ class ApiHelper {
         data: response.data,
       );
     } on DioException catch (e) {
-      log("API Error (${method.name}): ${e.message})   ($e)");
+      devPrintError("API Error (${method.name}): ${e.message})   ($e)");
       return ApiResponse(
         status: e.response?.statusCode ?? 500,
         msg: e.message ?? 'Unknown error',
