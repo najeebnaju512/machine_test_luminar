@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:machine_test_luminar/router/router.dart';
-import 'package:machine_test_luminar/router/routes/app_routes.dart';
 import 'package:machine_test_luminar/router/transition/transition.dart';
 import 'package:machine_test_luminar/screens/authenticated/listing_screen/details/view.dart';
 import 'package:machine_test_luminar/shared/model/authenticated/lead_list_model.dart';
@@ -10,6 +9,7 @@ import 'package:machine_test_luminar/shared/repo/authenticated/lead_list.dart';
 class LeadListController extends GetxController {
   final repo = LeadListRepo();
   final RxList<Result> leads = <Result>[].obs;
+  Rx<String?> errorMsg = Rx<String?>(null);
   final RxBool isLoading = false.obs;
   final RxBool hasMore = true.obs;
   final RxInt currentPage = 1.obs;
@@ -77,11 +77,13 @@ class LeadListController extends GetxController {
       dateTo: _dateTo,
     );
 
-    if (response != null && response.status == 200) {
-      final model = LeadListModel.fromJson(response.data);
+    if (response?.status == 200) {
+      final model = LeadListModel.fromJson(response?.data);
       leads.addAll(model.results ?? []);
       hasMore.value = model.next != null;
       currentPage.value++;
+    } else {
+      errorMsg.value = response?.msg;
     }
 
     isLoading.value = false;
@@ -103,5 +105,9 @@ class LeadListController extends GetxController {
   Future<void> onItemTap({String? id}) async {
     // appRouter.goNamed(Authenticated.lead, pathParameters: {'id': ?id,});'
     await pushWithTransition(navKey.currentContext!, LeadDetailPage(id: id!));
+  }
+
+  void onRetry() {
+    fetchLeads();
   }
 }

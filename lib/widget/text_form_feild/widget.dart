@@ -26,29 +26,34 @@ class CustomValidators {
     for (final type in types) {
       switch (type) {
         case ValidationType.required:
-          if (value == null || value.trim().isEmpty)
+          if (value == null || value.trim().isEmpty) {
             return '$label is required.';
+          }
           break;
         case ValidationType.email:
           final regex = RegExp(r'^[\w\.-]+@[\w\.-]+\.\w+$');
-          if (value != null && !regex.hasMatch(value))
+          if (value != null && !regex.hasMatch(value)) {
             return 'Enter a valid email.';
+          }
           break;
         case ValidationType.number:
-          if (value != null && double.tryParse(value) == null)
+          if (value != null && double.tryParse(value) == null) {
             return 'Enter a valid number.';
+          }
           break;
         case ValidationType.phone:
           final regex = RegExp(r'^\+?[0-9]{7,15}$');
-          if (value != null && !regex.hasMatch(value))
+          if (value != null && !regex.hasMatch(value)) {
             return 'Enter a valid phone number.';
+          }
           break;
         case ValidationType.url:
           final regex = RegExp(
             r'^(https?:\/\/)?([\w\-])+\.{1}([a-zA-Z]{2,63})([\/\w\-.]*)*\/?$',
           );
-          if (value != null && !regex.hasMatch(value))
+          if (value != null && !regex.hasMatch(value)) {
             return 'Enter a valid URL.';
+          }
           break;
         case ValidationType.minLength:
           if (minLength != null && (value?.length ?? 0) < minLength) {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:machine_test_luminar/core/tag_helper/teg_generator.dart';
 import 'package:machine_test_luminar/screens/authenticated/listing_screen/details/controller.dart';
+import 'package:machine_test_luminar/widget/screens/on_error_page.dart';
 
 class LeadDetailPage extends StatefulWidget {
   final String? id;
@@ -77,7 +78,12 @@ class _LeadDetailPageState extends State<LeadDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return controller.errorMsg.value != null
+        ? ErrorPage(
+            message: controller.errorMsg.value ?? '',
+            onRetry: controller.onRetry,
+          )
+        : Scaffold(
       appBar: AppBar(title: const Text("Lead Details")),
       body: Obx(() {
         if (controller.isloading.value) {

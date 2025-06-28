@@ -9,6 +9,7 @@ import 'package:machine_test_luminar/shared/repo/authenticated/profil.dart';
 class ProfileController extends GetxController {
   RxBool isEditing = false.obs;
   RxString name = "".obs;
+  Rx<String?> errorMsg = Rx<String?>(null);
   RxBool isLoading = false.obs;
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
@@ -40,7 +41,7 @@ class ProfileController extends GetxController {
               onPressed: () {
                 _saveUser();
               },
-              child: const Text('Logout'),
+              child: const Text('Update'),
             ),
           ],
         ),
@@ -67,7 +68,7 @@ class ProfileController extends GetxController {
   }
 
   Future<void> getData() async {
-    if (isLoading.value ) return;
+    if (isLoading.value) return;
     isLoading.value = true;
     var res = await repo.getProfileData();
     if (res?.status == 200) {
@@ -78,7 +79,13 @@ class ProfileController extends GetxController {
       phoneNoController.text = userData?.phone ?? '';
       whatsAppController.text = userData?.whatsappNumber ?? '';
       name.refresh();
+    } else {
+      errorMsg.value = res?.msg ?? ' ';
     }
-     isLoading.value = false;
+    isLoading.value = false;
+  }
+
+  void onRetry() {
+    getData();
   }
 }

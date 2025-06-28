@@ -9,6 +9,8 @@ class LeadDetailsController extends GetxController {
 
   Rx<Lead?> leadData = Rx<Lead?>(null);
 
+  Rx<String?> errorMsg = Rx<String?>(null);
+
   LeadDetailsController({required this.id});
 
   @override
@@ -29,6 +31,12 @@ class LeadDetailsController extends GetxController {
       leadData.value = LeadDetailsModel.fromJson(res?.data).lead;
       leadData.refresh();
       isloading.value = false;
+    } else {
+      errorMsg.value = res?.msg;
     }
+  }
+
+  void onRetry() {
+    getData();
   }
 }

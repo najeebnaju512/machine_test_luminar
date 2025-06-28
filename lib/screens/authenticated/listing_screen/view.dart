@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:machine_test_luminar/screens/authenticated/listing_screen/controller.dart';
 import 'package:machine_test_luminar/core/tag_helper/teg_generator.dart';
-import 'package:machine_test_luminar/screens/authenticated/listing_screen/details/view.dart';
+import 'package:machine_test_luminar/widget/screens/on_error_page.dart';
 import 'package:machine_test_luminar/widget/text_form_feild/widget.dart';
 
 class LeadListScreen extends StatefulWidget {
@@ -31,7 +31,12 @@ class _LeadListScreenState extends State<LeadListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return controller.errorMsg.value != null
+        ? ErrorPage(
+            message: controller.errorMsg.value ?? '',
+            onRetry: controller.onRetry,
+          )
+        : Scaffold(
       appBar: AppBar(title: const Text("Lead List")),
       body: Column(
         children: [
