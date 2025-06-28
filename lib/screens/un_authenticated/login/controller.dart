@@ -10,11 +10,13 @@ import 'package:machine_test_luminar/shared/repo/un_authenticated/login.dart';
 
 class LoginController extends GetxController {
   final formKey = GlobalKey<FormState>();
+  RxBool isLoading = RxBool(false);
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   LoginRepo repo = LoginRepo();
 
   Future<void> onSubmit() async {
+    isLoading.value = true;
     if (formKey.currentState?.validate() ?? false) {
       var res = await repo.onLogin(
         email: emailController.text,
@@ -27,6 +29,7 @@ class LoginController extends GetxController {
         appRouteState.logIn();
       }
     }
+    isLoading.value = false;
   }
 
   Future<void> _setToLocalDb(UserMeModel data) async {
