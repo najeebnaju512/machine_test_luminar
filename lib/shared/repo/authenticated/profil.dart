@@ -1,5 +1,6 @@
 import 'package:machine_test_luminar/app_config/app_config.dart';
 import 'package:machine_test_luminar/core/dev_tools/print.dart';
+import 'package:machine_test_luminar/core/snack_bar/helper.dart';
 import 'package:machine_test_luminar/db/hive_fetch_helper.dart';
 import 'package:machine_test_luminar/shared/helper/api_helper.dart';
 
@@ -12,6 +13,9 @@ class ProfileRepo {
           access: GetHiveHelper.getUserDetails()?.accestoken,
         ),
       );
+      if (response.status != 200) {
+        showGlobalSnackBar(message: 'Message : ${response.msg}');
+      }
       return response;
     } catch (e) {
       devPrintError('Catch : $e');
@@ -37,6 +41,9 @@ class ProfileRepo {
         },
         header: ApiHelper.getApiHeader(),
       );
+      if (response.status != 200) {
+        showGlobalSnackBar(message: 'Message : ${response.msg}');
+      }
       return response;
     } catch (e) {
       devPrintError('Catch : $e');

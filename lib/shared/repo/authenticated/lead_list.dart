@@ -1,5 +1,6 @@
 import 'package:machine_test_luminar/app_config/app_config.dart';
 import 'package:machine_test_luminar/core/dev_tools/print.dart';
+import 'package:machine_test_luminar/core/snack_bar/helper.dart' show showGlobalSnackBar;
 import 'package:machine_test_luminar/db/hive_fetch_helper.dart';
 import 'package:machine_test_luminar/shared/helper/api_helper.dart';
 import 'package:machine_test_luminar/shared/model/authenticated/filter/lead_course_model.dart';
@@ -36,6 +37,9 @@ class LeadListRepo {
           access: GetHiveHelper.getUserDetails()?.accestoken,
         ),
       );
+      if (response.status != 200) {
+        showGlobalSnackBar(message: 'Message : ${response.msg}');
+      }
       return response;
     } catch (e) {
       devPrintError('Catch : $e');
@@ -51,6 +55,9 @@ class LeadListRepo {
           access: GetHiveHelper.getUserDetails()?.accestoken,
         ),
       );
+      if (response.status != 200) {
+        showGlobalSnackBar(message: 'Message : ${response.msg}');
+      }
       return response;
     } catch (e) {
       devPrintError('Catch : $e');
@@ -66,6 +73,9 @@ class LeadListRepo {
           access: GetHiveHelper.getUserDetails()?.accestoken,
         ),
       );
+      if (response.status != 200) {
+        showGlobalSnackBar(message: 'Message : ${response.msg}');
+      }
       if (response.status == 200) {
         var data = LeadStatusModel.fromJson(response.data).statuses;
         return data
@@ -88,6 +98,9 @@ class LeadListRepo {
           access: GetHiveHelper.getUserDetails()?.accestoken,
         ),
       );
+      if (response.status != 200) {
+        showGlobalSnackBar(message: 'Message : ${response.msg}');
+      }
       if (response.status == 200) {
         var data = LeadSourcesModel.fromJson(response.data).sources;
         return data
@@ -110,6 +123,9 @@ class LeadListRepo {
           access: GetHiveHelper.getUserDetails()?.accestoken,
         ),
       );
+      if (response.status != 200) {
+        showGlobalSnackBar(message: 'Message : ${response.msg}');
+      }
       if (response.status == 200) {
         var data = LeadCoursesModel.fromJson(response.data).courses;
         return data
