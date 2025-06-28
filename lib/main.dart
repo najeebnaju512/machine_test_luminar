@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:machine_test_luminar/db/model/user_details/user.dart';
 import 'package:machine_test_luminar/router/router.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:get/get.dart' show GetMaterialApp;
 
-void main() {
+import 'db/hive_key.dart';
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Set URL strategy for web
   setPathUrlStrategy();
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(UserDetailsHiveAdapter());
+  await Hive.openBox<UserDetailsHive>(DbKeys.userDetails);
+
   runApp(const MyApp());
 }
 

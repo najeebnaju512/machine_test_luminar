@@ -1,11 +1,11 @@
 class AppConfig {
   //base url is set
-  static String baseurl = " https://api.crm.luminartechnohub.com/api";
+  static String baseurl = "https://api.crm.luminartechnohub.com/api";
 }
 
 class EndPoints {
   // Post 
-  static String postLogin = "/auth/login/";
+  static String login = "/auth/login/";
   /// Get for details view & Patch for edit
   static String profile = "/profile/";
   /// Get 

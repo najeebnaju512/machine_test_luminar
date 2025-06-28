@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:machine_test_luminar/core/dev_tools/print.dart';
+import 'package:machine_test_luminar/db/hive_fetch_helper.dart';
+import 'package:machine_test_luminar/db/model/user_details/user.dart';
 import 'package:machine_test_luminar/router/routes/app_routes.dart';
 
 ///Global Route Instanse
@@ -17,17 +20,17 @@ class AppRouteState extends ChangeNotifier {
   String get fullPath => _fullPath;
   String _fullPath = '';
   void init() async {
-    // devPrint("App Route State Initalized", type: PrintType.success);
-    // UserDetailsHive? user = GetHiveHelper.getUserDetails();
+    devPrint("App Route State Initalized", type: PrintType.success);
+    UserDetailsHive? user = GetHiveHelper.getUserDetails();
 
-    // if (user == null) {
-    //   // devPrint("Not Authenticated", type: PrintType.success);
+    if (user == null) {
+      devPrint("Not Authenticated", type: PrintType.success);
 
-    //   _appStatus = AppStatus.unAuthenticated;
-    // } else {
-    // devPrint(" Authenticated", type: PrintType.success);
-    _appStatus = AppStatus.authenticated;
-    // }
+      _appStatus = AppStatus.unAuthenticated;
+    } else {
+      devPrint(" Authenticated", type: PrintType.success);
+      _appStatus = AppStatus.authenticated;
+    }
   }
 
   ///Sets the app status to authenticated
