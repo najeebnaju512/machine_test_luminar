@@ -4,16 +4,17 @@ class AppConfig {
 }
 
 class EndPoints {
-  // Post 
+  // Post
   static String login = "/auth/login/";
+
   /// Get for details view & Patch for edit
   static String profile = "/profile/";
-  /// Get 
-  /// Optional Params 
-  /// {search, page_size, page , lead_status , lead_source, course ,date_from , date_to} 
+
+  /// Get
+  /// Optional Params
+  /// {search, page_size, page , lead_status , lead_source, course ,date_from , date_to}
   static String leads = "/leads/";
   static String leadStatus = "/lead/statuses/";
   static String leadSource = "/lead/sources/";
-  static String couses = "/courses/";
-
+  static String courses = "/courses/";
 }

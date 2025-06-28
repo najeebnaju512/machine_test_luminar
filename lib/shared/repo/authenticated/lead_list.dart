@@ -2,6 +2,10 @@ import 'package:machine_test_luminar/app_config/app_config.dart';
 import 'package:machine_test_luminar/core/dev_tools/print.dart';
 import 'package:machine_test_luminar/db/hive_fetch_helper.dart';
 import 'package:machine_test_luminar/shared/helper/api_helper.dart';
+import 'package:machine_test_luminar/shared/model/authenticated/filter/lead_course_model.dart';
+import 'package:machine_test_luminar/shared/model/authenticated/filter/lead_sources_model.dart';
+import 'package:machine_test_luminar/shared/model/authenticated/filter/lead_statues.dart';
+import 'package:machine_test_luminar/widget/drop_down/drop_down.dart';
 
 class LeadListRepo {
   Future<ApiResponse?> getLeadList({
@@ -39,9 +43,9 @@ class LeadListRepo {
     return null;
   }
 
-  Future<ApiResponse?> getLeadDetails(String id) async{
-    try{
-       var response = await ApiHelper.getData(
+  Future<ApiResponse?> getLeadDetails(String id) async {
+    try {
+      var response = await ApiHelper.getData(
         endPoint: "${EndPoints.leads}$id",
         header: ApiHelper.getApiHeader(
           access: GetHiveHelper.getUserDetails()?.accestoken,
@@ -52,5 +56,71 @@ class LeadListRepo {
       devPrintError('Catch : $e');
     }
     return null;
+  }
+
+  Future<List<DropDownItem>> getLeadStatuses() async {
+    try {
+      var response = await ApiHelper.getData(
+        endPoint: EndPoints.leadStatus,
+        header: ApiHelper.getApiHeader(
+          access: GetHiveHelper.getUserDetails()?.accestoken,
+        ),
+      );
+      if (response.status == 200) {
+        var data = LeadStatusModel.fromJson(response.data).statuses;
+        return data
+                ?.map((e) => DropDownItem(id: e.id!, label: e.name ?? ''))
+                .toList() ??
+            [];
+      }
+    } catch (e) {
+      devPrintError('Catch : $e');
+      return [];
+    }
+    return [];
+  }
+
+  Future<List<DropDownItem>> getLeadSources() async {
+    try {
+      var response = await ApiHelper.getData(
+        endPoint: EndPoints.leadSource,
+        header: ApiHelper.getApiHeader(
+          access: GetHiveHelper.getUserDetails()?.accestoken,
+        ),
+      );
+      if (response.status == 200) {
+        var data = LeadSourcesModel.fromJson(response.data).sources;
+        return data
+                ?.map((e) => DropDownItem(id: e.id!, label: e.label ?? ''))
+                .toList() ??
+            [];
+      }
+    } catch (e) {
+      devPrintError('Catch : $e');
+      return [];
+    }
+    return [];
+  }
+
+  Future<List<DropDownItem>> getLeadCourses() async {
+    try {
+      var response = await ApiHelper.getData(
+        endPoint: EndPoints.courses,
+        header: ApiHelper.getApiHeader(
+          access: GetHiveHelper.getUserDetails()?.accestoken,
+        ),
+      );
+      if (response.status == 200) {
+        var data = LeadCoursesModel.fromJson(response.data).courses;
+        return data
+                ?.map((e) => DropDownItem(id: e.id!, label: e.courseName ?? ''))
+                .toList() ??
+            [];
+      }
+    } catch (e) {
+      devPrintError('Catch : $e');
+      return [];
+    }
+    return [];
   }
 }

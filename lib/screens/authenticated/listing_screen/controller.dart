@@ -5,10 +5,14 @@ import 'package:machine_test_luminar/router/transition/transition.dart';
 import 'package:machine_test_luminar/screens/authenticated/listing_screen/details/view.dart';
 import 'package:machine_test_luminar/shared/model/authenticated/lead_list_model.dart';
 import 'package:machine_test_luminar/shared/repo/authenticated/lead_list.dart';
+import 'package:machine_test_luminar/widget/drop_down/drop_down.dart';
 
 class LeadListController extends GetxController {
   final repo = LeadListRepo();
   final RxList<Result> leads = <Result>[].obs;
+  List<DropDownItem> statusList = [];
+  List<DropDownItem> courseList = [];
+  List<DropDownItem> sourceList = [];
   Rx<String?> errorMsg = Rx<String?>(null);
   final RxBool isLoading = false.obs;
   final RxBool hasMore = true.obs;
@@ -28,6 +32,7 @@ class LeadListController extends GetxController {
   void onInit() {
     fetchLeads();
     // onSearch();
+    fetchFilterList();
     scrollController.addListener(_scrollListener);
     super.onInit();
   }
@@ -39,6 +44,24 @@ class LeadListController extends GetxController {
         : searchController.text;
     fetchLeads(isRefresh: true);
     // });
+  }
+
+  Future<void> _onFilterApply({
+    required course,
+    required status,
+    required source,
+  }) async {
+    _course = course == null ? null : course.toString();
+
+    _leadSource = source != null ? source.toString() : null;
+
+    _leadStatus = status == null ? null : status.toString();
+    fetchLeads(isRefresh: true);
+    _course = course == null ? null : course.toString();
+
+    _leadSource = source != null ? source.toString() : null;
+
+    _leadStatus = status == null ? null : status.toString();
   }
 
   void fetchLeads({
@@ -109,5 +132,77 @@ class LeadListController extends GetxController {
 
   void onRetry() {
     fetchLeads();
+  }
+
+  Future<void> fetchFilterList() async {
+    statusList = await repo.getLeadStatuses();
+    courseList = await repo.getLeadCourses();
+    sourceList = await repo.getLeadSources();
+  }
+
+  void onFilterTap(BuildContext context) {
+    DropDownItem? selectedCourse = DropDownItem()..id = _course;
+    DropDownItem? selectedStatus = DropDownItem()..id = _leadStatus;
+    DropDownItem? selectedSource = DropDownItem()..id = _leadSource;
+
+    showDialog(
+      context: context,
+      builder: (_) => StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: const Text('Filter Leads'),
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  CustomSearchableDropdown(
+                    items: courseList,
+                    selectedId: selectedCourse?.id,
+                    hintText: "Select Course",
+                    onChanged: (item) => setState(() => selectedCourse = item),
+                  ),
+                  const SizedBox(height: 16),
+                  CustomSearchableDropdown(
+                    items: statusList,
+                    selectedId: selectedStatus?.id,
+                    hintText: "Select Status",
+                    onChanged: (item) => setState(() => selectedStatus = item),
+                  ),
+                  const SizedBox(height: 16),
+                  CustomSearchableDropdown(
+                    items: sourceList,
+                    selectedId: selectedSource?.id,
+                    hintText: "Select Source",
+                    onChanged: (item) => setState(() => selectedSource = item),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  _onFilterApply(course: null, status: null, source: null);
+                },
+                child: const Text('Clear'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  _onFilterApply(
+                    course: selectedCourse?.id,
+                    status: selectedStatus?.id,
+                    source: selectedSource?.id,
+                  );
+                },
+                child: const Text('Apply'),
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 }
